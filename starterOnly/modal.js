@@ -20,6 +20,6 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
-console.log("hello");
+console.log("test");
 
 
