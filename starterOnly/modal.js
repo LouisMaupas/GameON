@@ -63,7 +63,7 @@ inputLastName.addEventListener("input", function(e){
 });
 
 // (3) L'adresse électronique est valide.
-
+const inputMail = document.querySelector('email')
 
 
 // (4) Pour le nombre de concours, une valeur numérique est saisie.
@@ -91,9 +91,6 @@ const inputRadio = document.querySelector('input[name="location"]:checked')
 
 // (6) La case des conditions générales est cochée.
 const inputCheckbox = document.querySelector('checkbox1')
-
-
-
 
 
 
