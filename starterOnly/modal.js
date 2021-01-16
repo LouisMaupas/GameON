@@ -89,7 +89,14 @@ const inputRadio = document.querySelector('input[name="location"]:checked')
 
 
 
-// (6) La case des conditions générales est cochée, l'autre case est facultative / peut être laissée décochée.
+// (6) La case des conditions générales est cochée.
+const inputCheckbox = document.querySelector('checkbox1')
+
+
+
+
+
+
 // Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation.
 
 
