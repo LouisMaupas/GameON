@@ -35,12 +35,19 @@ close.addEventListener("click", function(){
 const inputFirstName = document.getElementById("first")
 inputFirstName.addEventListener("input", function(e){
   var value = e.target.value;
- /* if(value == "a") {
-    alert("ça marche")
-  } else {
-    alert("ça ne marche pas")
+  inputFirstName.onblur = isFirstCorrect
+  function isFirstCorrect(){
+    if (value.length < 2) {
+      inputFirstName.classList.add("border-wrong");
+      inputFirstName.setCustomValidity("Vous devez saisir au moins 2 caractères ?")
+    } else {
+      inputFirstName.classList.add("border-good");
+    }
   }
-});*/
+
+
+
+});
 
 
 //let nameInput = document.reserve.first.value
@@ -75,5 +82,3 @@ Corriger les erreurs d'affichage existantes.
 Tester toutes les fonctionnalités des boutons et des entrées de formulaire 
 (tester les valeurs correctes et incorrectes)
 */
-
-

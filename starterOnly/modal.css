@@ -527,3 +527,15 @@ footer {
   }
 }
 
+
+/* AJOUT PERSO */
+
+.border-wrong {
+  border: 2px solid red;
+  box-shadow: 0 0 5px 1px red;
+}
+
+.border-good {
+  border: 2px solid green;
+  box-shadow: 0 0 5px 1px green;
+}
