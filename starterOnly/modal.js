@@ -42,6 +42,7 @@ inputFirstName.addEventListener("input", function(e){
   function isFirstCorrect(){
     if (value.length < 2) {
       inputFirstName.classList.add("border-wrong");
+      inputLastName.setCustomValidity("Veuillez entrer 2 caractères ou plus pour le champ du prénom.")
 
     } else {
       inputFirstName.classList.add("border-good");
@@ -55,15 +56,40 @@ inputLastName.addEventListener("input", function(e){
   function isFirstCorrect(){
     if (value.length < 2) {
       inputLastName.classList.add("border-wrong");
-      inputLastName.setCustomValidity("Vous devez saisir au moins 2 caractères")
+      inputLastName.setCustomValidity("Veuillez entrer 2 caractères ou plus pour le champ du nom.")
     } else {
       inputLastName.classList.add("border-good");
     }
   }
 });
+// NE S'ACTUALISE PAS SI L'USER CHANGE L'INPUT
+
+
 
 // (3) L'adresse électronique est valide.
+/*
 const inputMail = document.querySelector('email')
+if(inputMail.validity.valid) {
+  inputMail.classList.add("border-good")
+} else {
+  inputMail.classList.add("border-wrong");
+  inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.")
+}
+*/
+
+const inputMail = document.querySelector('email')
+inputMail.addEventListener("input", function(e){
+  var test = inputMail.value.length === 0 || emailRegExp.test(inputMail.value);
+  if (test) {
+    console.log("non")
+  } else {
+    console.log("oui")
+  }
+});
+
+
+// Pour respecter la spécification HTML5 - issu de developper.mozzila
+var emailRegExp  = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 
 // (4) Pour le nombre de concours, une valeur numérique est saisie.
@@ -72,10 +98,10 @@ inputQuantity.addEventListener("input", function(e){
   inputQuantity.onblur = isItANum
   function isItANum(){
     if (isNaN(value)) {
-      inputLastName.classList.add("border-wrong");
-      inputLastName.setCustomValidity("Vous devez entrer des chiffres")
+      inputQuantity.classList.add("border-wrong");
+      inputQuantity.setCustomValidity("Vous devez entrer des chiffres")
     } else {
-      inputLastName.classList.add("border-good");
+      inputQuantity.classList.add("border-good");
     }
   }
 });
@@ -83,10 +109,17 @@ inputQuantity.addEventListener("input", function(e){
 
 // (5) Un bouton radio est sélectionné.
 const inputRadio = document.querySelector('input[name="location"]:checked')
-
-
-
-
+// ou
+const inputRadio2 = reserve.radio['prenom']
+//inputRadio2.value
+var radios = document.getElementsByTagName('radio');
+var value;
+for (var i = 0; i < radios.length; i++) {
+    if (radios[i].type === 'radio' && radios[i].checked) {
+        value = radios[i].value; 
+        console.log(value)      
+    }
+  }
 
 
 // (6) La case des conditions générales est cochée.
@@ -101,8 +134,6 @@ const inputCheckbox = document.querySelector('checkbox1')
 // ISSUE 3 Ajouter validation ou messages d'erreur
 /*
 Des messages d'erreur spécifiques doivent apparaître sous l'entrée qui n'est pas correcte.
- Les messages d'erreur doivent s'afficher sous le champ de saisie associé. Exemples :
-
 "Veuillez entrer 2 caractères ou plus pour le champ du nom."
 "Vous devez choisir une option."
 "Vous devez vérifier que vous acceptez les termes et conditions."
