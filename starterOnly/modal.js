@@ -81,9 +81,14 @@ inputQuantity.addEventListener("input", function(e){
 });
 
 
-
-
 // (5) Un bouton radio est sélectionné.
+const inputRadio = document.querySelector('input[name="location"]:checked')
+
+
+
+
+
+
 // (6) La case des conditions générales est cochée, l'autre case est facultative / peut être laissée décochée.
 // Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation.
 
