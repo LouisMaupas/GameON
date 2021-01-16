@@ -13,6 +13,8 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const close = document.querySelector(".close"); // select btn closing modal
+const inputFirstName = document.getElementById("first") // select first name in form input
+const inputLastName = document.getElementById("last") // last name
 
 // launch modal event 
 // tous les .modal-btn au click transforme le style display du modale en block
@@ -30,30 +32,37 @@ close.addEventListener("click", function(){
 })
 
 
-// ISSUE 2 Implémenter entrées du formulaire
-//(1) Le champ Prénom a un minimum de 2 caractères / n'est pas vide.
-const inputFirstName = document.getElementById("first")
+/*ISSUE 2 Implémenter entrées du formulaire
+(1) Le champ Prénom a un minimum de 2 caractères / n'est pas vide.
+(2) Le champ du nom de famille a un minimum de 2 caractères / n'est pas vide. */
 inputFirstName.addEventListener("input", function(e){
   var value = e.target.value;
   inputFirstName.onblur = isFirstCorrect
   function isFirstCorrect(){
     if (value.length < 2) {
       inputFirstName.classList.add("border-wrong");
-      inputFirstName.setCustomValidity("Vous devez saisir au moins 2 caractères ?")
+
     } else {
       inputFirstName.classList.add("border-good");
     }
   }
+});
 
-
-
+inputLastName.addEventListener("input", function(e){
+  var value = e.target.value;
+  inputLastName.onblur = isFirstCorrect
+  function isFirstCorrect(){
+    if (value.length < 2) {
+      inputLastName.classList.add("border-wrong");
+      inputLastName.setCustomValidity("Vous devez saisir au moins 2 caractères")
+    } else {
+      inputLastName.classList.add("border-good");
+    }
+  }
 });
 
 
-//let nameInput = document.reserve.first.value
-// On vérifie (une fois que l'utilisateur a fini de saisir son prénom) ce qu'il a écrit 
-// si la valeur NE contient PAS au moins 2 caractères
-// alors le bouton submit du formulaire est disabled="true" 
+
 
 
 // ISSUE 3 Ajouter validation ou messages d'erreur
