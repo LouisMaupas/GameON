@@ -15,6 +15,7 @@ const formData = document.querySelectorAll(".formData");
 const close = document.querySelector(".close"); // select btn closing modal
 const inputFirstName = document.getElementById("first") // select first name in form input
 const inputLastName = document.getElementById("last") // last name
+const inputQuantity = document.getElementById("quantity") // last name
 
 // launch modal event 
 // tous les .modal-btn au click transforme le style display du modale en block
@@ -61,7 +62,30 @@ inputLastName.addEventListener("input", function(e){
   }
 });
 
+// (3) L'adresse électronique est valide.
 
+
+
+// (4) Pour le nombre de concours, une valeur numérique est saisie.
+inputQuantity.addEventListener("input", function(e){
+  var value = e.target.value;
+  inputQuantity.onblur = isItANum
+  function isItANum(){
+    if (isNaN(value)) {
+      inputLastName.classList.add("border-wrong");
+      inputLastName.setCustomValidity("Vous devez entrer des chiffres")
+    } else {
+      inputLastName.classList.add("border-good");
+    }
+  }
+});
+
+
+
+
+// (5) Un bouton radio est sélectionné.
+// (6) La case des conditions générales est cochée, l'autre case est facultative / peut être laissée décochée.
+// Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation.
 
 
 
