@@ -1,5 +1,5 @@
 //Only if header has .topnav class we add .responsive class otherwise we remove others class (add exclusively .topnav)
-function editNav() {
+function editNav() { //called lines 26 HTML
   var x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
     x.className += " responsive";
@@ -17,6 +17,7 @@ const inputFirstName = document.getElementById("first") // select first name in 
 const inputLastName = document.getElementById("last") // last name
 const inputQuantity = document.getElementById("quantity") // last name
 const inputMail = document.getElementById('email') // mail
+const inputBirthdate = document.getElementById('birthdate') // birthdate
 // launch modal event 
 // All .modal-btn become display block on click
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -31,6 +32,7 @@ close.addEventListener("click", function(){
   modalbg.style.display = "none";
 })
 
+
 /*ISSUE 2 Implémenter entrées du formulaire*/
 //(1) Le champ Prénom a un minimum de 2 caractères / n'est pas vide.
 
@@ -41,9 +43,12 @@ inputFirstName.addEventListener("input", function(e){ //listen if #first's input
     if (value.length < 2) {
       inputFirstName.classList.add("border-wrong");
       inputLastName.setCustomValidity("Veuillez entrer 2 caractères ou plus pour le champ du prénom.")
-
+      let validatorOne = false
+      return validatorOne
     } else {
       inputFirstName.classList.add("border-good");
+      let validatorOne = true
+      return validatorOne
     }
   }
 });
@@ -75,16 +80,13 @@ inputMail.addEventListener("input", function(){
     inputMail.classList.add("border-good")
   } else {
     inputMail.classList.add("border-wrong");
-    inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.")
+    inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.") 
   }
 })
 
 // (4) Pour le nombre de concours, une valeur numérique est saisie.
-
 inputQuantity.addEventListener("input", function(e){
   var value = e.target.value;
-  inputQuantity.onblur = isItANum
-  function isItANum(){
     if (isNaN(value)) {
       inputQuantity.classList.add("border-wrong");
       inputQuantity.setCustomValidity("Vous devez entrer des chiffres")
@@ -92,14 +94,14 @@ inputQuantity.addEventListener("input", function(e){
       inputQuantity.classList.add("border-good");
     }
   }
-});
+);
 
 
 // (5) Un bouton radio est sélectionné.
 
 const inputRadio = document.querySelector('input[name="location"]:checked')
 // ou
-const inputRadio2 = reserve.radio['prenom']
+//const inputRadio2 = reserve.radio['prenom']
 //inputRadio2.value
 var radios = document.getElementsByTagName('radio');
 var value;
@@ -112,12 +114,41 @@ for (var i = 0; i < radios.length; i++) {
 
 
 // (6) La case des conditions générales est cochée.
-
 const inputCheckbox = document.querySelector('checkbox1')
 
 
 
 // Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation.
+// Form : onsubmit="return validate();"
+function validate() {
+  validators()//call validator calcul function
+  if(validator == true) { //if validator is true
+    alert("submit")
+  } else {
+    alert("Le formualire saisit est incorrect.")
+  }
+}
+
+//counter of users's input correctly entered
+let validator = false //validator is false
+let validatorOne, validatorTwo, validatorThree, validatorFour, validatorFive, validatorSix, validatorSeven, validatorEight 
+//calculates the nubmers of good validator
+function validators(){
+  if(validatorOne) {validator ++}
+  if(validatorTwo) {validator ++}
+  if(validatorThree) {validator ++}
+  if(validatorFour) {validator ++}
+  if(validatorFive) {validator ++}
+  if(validatorSix) {validator ++}
+  if(validatorSeven) {validator ++}
+  if(validatorEight) {validator ++}
+  if(validator = 8) { //if all validators are true validator = 8 
+    validator = true // if validator = 8 validator is true
+  } else {
+    validator = false
+  }
+  return validator
+}
 
 
 
@@ -133,6 +164,16 @@ const inputCheckbox = document.querySelector('checkbox1')
 
 
 //"Vous devez entrer votre date de naissance."
+inputBirthdate.addEventListener("input", function(e){
+  var value = e.target.value;
+    if (isNaN(value)) {
+      inputQuantity.classList.add("border-wrong");
+      inputQuantity.setCustomValidity("Vous devez entrer votre date de naissance.")
+    } else {
+      inputQuantity.classList.add("border-good");
+    }
+  }
+);
 
 
 
