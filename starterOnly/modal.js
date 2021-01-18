@@ -62,34 +62,29 @@ inputLastName.addEventListener("input", function(e){
     }
   }
 });
-// NE S'ACTUALISE PAS SI L'USER CHANGE L'INPUT
-
 
 
 // (3) L'adresse électronique est valide.
-/*
-const inputMail = document.querySelector('email')
-if(inputMail.validity.valid) {
-  inputMail.classList.add("border-good")
-} else {
-  inputMail.classList.add("border-wrong");
-  inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.")
-}
-*/
-
-const inputMail = document.querySelector('email')
-inputMail.addEventListener("input", function(e){
-  var test = inputMail.value.length === 0 || emailRegExp.test(inputMail.value);
-  if (test) {
-    console.log("non")
-  } else {
-    console.log("oui")
-  }
-});
-
-
 // Pour respecter la spécification HTML5 - issu de developper.mozzila
 var emailRegExp  = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+const inputMail = document.getElementById('email')
+inputMail.addEventListener("input", function(e){
+  var regex = inputMail.value.length === 0 || emailRegExp.test(inputMail.value);
+  if(regex) {
+    inputMail.classList.add("border-good")
+  } else {
+    inputMail.classList.add("border-wrong");
+    inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.")
+  }
+})
+
+
+
+
+
+
+
 
 
 // (4) Pour le nombre de concours, une valeur numérique est saisie.
