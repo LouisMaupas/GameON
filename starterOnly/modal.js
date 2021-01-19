@@ -18,6 +18,9 @@ const inputLastName = document.getElementById("last") // last name
 const inputQuantity = document.getElementById("quantity") // last name
 const inputMail = document.getElementById('email') // mail
 const inputBirthdate = document.getElementById('birthdate') // birthdate
+const inputCheckbox = document.getElementById('checkbox1') //terms of use
+const submitBtn = document.getElementById('submit') //submit btn of form
+
 // launch modal event 
 // All .modal-btn become display block on click
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -33,7 +36,7 @@ close.addEventListener("click", function(){
 })
 
 
-/*ISSUE 2 Implémenter entrées du formulaire*/
+/*ISSUE 2 Implémenter entrées du formulaire + ISSUE 3 Ajouter validation ou messages d'erreur*/
 //(1) Le champ Prénom a un minimum de 2 caractères / n'est pas vide.
 
 inputFirstName.addEventListener("input", function(e){ //listen if #first's input take an user input
@@ -51,6 +54,7 @@ inputFirstName.addEventListener("input", function(e){ //listen if #first's input
       return validatorOne
     }
   }
+  isFirstCorrect()
 });
 
 //(2) Le champ du nom de famille a un minimum de 2 caractères / n'est pas vide. 
@@ -84,6 +88,24 @@ inputMail.addEventListener("input", function(){
   }
 })
 
+
+//"Vous devez entrer votre date de naissance."
+inputBirthdate.addEventListener("input", function(e){
+  var value = e.target.value;
+    if (value === "") {
+      inputBirthdate.classList.add("border-wrong");
+      inputBirthdate.setCustomValidity("Vous devez entrer votre date de naissance.")
+      validatorFour = false
+      return validatorFour
+    } else {
+      inputBirthdate.classList.add("border-good");
+      validatorFour = true
+      return validatorFour
+    }
+  }
+);
+
+
 // (4) Pour le nombre de concours, une valeur numérique est saisie.
 inputQuantity.addEventListener("input", function(e){
   var value = e.target.value;
@@ -97,9 +119,10 @@ inputQuantity.addEventListener("input", function(e){
 );
 
 
-// (5) Un bouton radio est sélectionné.
-
+// (5) Un bouton radio est sélectionné. pour les villes
+//"Vous devez choisir une option."
 const inputRadio = document.querySelector('input[name="location"]:checked')
+
 // ou
 //const inputRadio2 = reserve.radio['prenom']
 //inputRadio2.value
@@ -112,21 +135,44 @@ for (var i = 0; i < radios.length; i++) {
     }
   }
 
+// ------ A TESTER----
+/*
+for(i=0; i<document.formulaire.location.length; i++) {
+  if(document.location[i].checked == true) {
+    let checked = 1
+    return checked
+  } else {
+    let checked = 0
+    return checked
+  }
+}
+if(checked == 0) {
+  alert("Veuillez choisir la frequence des visites !");
+  return false;
+}*/
 
 // (6) La case des conditions générales est cochée.
-const inputCheckbox = document.querySelector('checkbox1')
+//"Vous devez vérifier que vous acceptez les termes et conditions."
+if(inputCheckbox.checked = true){
+  //validatorSeven++
+} else {
+  inputCheckbox.setCustomValidity("Vous devez vérifier que vous acceptez les termes et conditions")
+}
 
 
-
+//ISSUE 4 Ajouter confirmation quand envoie réussi
+/* Après une validation réussie, inclure un message de confirmation de la soumission réussie pour l'utilisateur (ex. "Merci ! Votre réservation a été reçue.") */
 // Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation.
+
 // Form : onsubmit="return validate();"
 function validate() {
   validators()//call validator calcul function
   if(validator == true) { //if validator is true
     alert("submit")
   } else {
-    alert("Le formualire saisit est incorrect.")
+    alert("Merci ! Votre réservation a été reçue")
   }
+ alert("test")
 }
 
 //counter of users's input correctly entered
@@ -142,7 +188,7 @@ function validators(){
   if(validatorSix) {validator ++}
   if(validatorSeven) {validator ++}
   if(validatorEight) {validator ++}
-  if(validator = 8) { //if all validators are true validator = 8 
+  if(validator = 1) { //if all validators are true validator = 8 
     validator = true // if validator = 8 validator is true
   } else {
     validator = false
@@ -150,41 +196,6 @@ function validators(){
   return validator
 }
 
-
-
-// ISSUE 3 Ajouter validation ou messages d'erreur
-//Des messages d'erreur spécifiques doivent apparaître sous l'entrée qui n'est pas correcte.
-
-
-//"Vous devez choisir une option."
-
-
-//"Vous devez vérifier que vous acceptez les termes et conditions."
-
-
-
-//"Vous devez entrer votre date de naissance."
-inputBirthdate.addEventListener("input", function(e){
-  var value = e.target.value;
-    if (isNaN(value)) {
-      inputQuantity.classList.add("border-wrong");
-      inputQuantity.setCustomValidity("Vous devez entrer votre date de naissance.")
-    } else {
-      inputQuantity.classList.add("border-good");
-    }
-  }
-);
-
-
-
-
-
-//ISSUE 4 Ajouter confirmation quand envoie réussi
-/*
-Après une validation réussie, inclure un message de confirmation 
-de la soumission réussie pour l'utilisateur 
-(ex. "Merci ! Votre réservation a été reçue.")
-*/
 
 //ISSUE 5 Tests manuels
 /*
