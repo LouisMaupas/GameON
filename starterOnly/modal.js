@@ -1,6 +1,6 @@
 //Only if header has .topnav class we add .responsive class otherwise we remove others class (add exclusively .topnav)
 function editNav() { //called lines 26 HTML
-  var x = document.getElementById("myTopnav");
+  const x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
     x.className += " responsive";
   } else {
@@ -9,17 +9,23 @@ function editNav() { //called lines 26 HTML
 }
 
 // DOM Elements
-const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelectorAll(".modal-btn");
-const formData = document.querySelectorAll(".formData");
-const close = document.querySelector(".close"); // select btn closing modal
-const inputFirstName = document.getElementById("first") // select first name in form input
-const inputLastName = document.getElementById("last") // last name
-const inputQuantity = document.getElementById("quantity") // last name
-const inputMail = document.getElementById('email') // mail
-const inputBirthdate = document.getElementById('birthdate') // birthdate
-const inputCheckbox = document.getElementById('checkbox1') //terms of use
-const submitBtn = document.getElementById('submit') //submit btn of form
+const modalbg = document.querySelector(".bground"),
+  modalBtn = document.querySelectorAll(".modal-btn"),
+  formData = document.querySelectorAll(".formData"),
+  close = document.querySelector(".close"), // select btn closing modal
+  inputFirstName = document.getElementById("first"), // select first name in form input
+  inputLastName = document.getElementById("last"), // last name
+  inputQuantity = document.getElementById("quantity"), // last name
+  inputMail = document.getElementById('email'), // mail
+  inputBirthdate = document.getElementById('birthdate'), // birthdate
+  inputCheckbox = document.getElementById('checkbox1'), //terms of use
+  submitBtn = document.getElementById('submit'); //submit btn of form
+
+//counter of users's input correctly entered
+let validatorCounter = 0, //total of validators
+  validatorOne, validatorTwo, validatorThree, validatorFour, validatorFive, validatorSix, validatorSeven, validatorEight, //each validator
+  validatorBoolean; //If all validators are correct then validatorCounter is equal to 8 and validatorBoolean becomes true 
+
 
 // launch modal event 
 // All .modal-btn become display block on click
@@ -30,77 +36,62 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
-// On clic change modalbg display to "none"
-close.addEventListener("click", function(){
-  modalbg.style.display = "none";
-})
+// On click change modalbg display to "none"
+close.addEventListener("click", () => modalbg.style.display = "none");
 
 
 /*ISSUE 2 Implémenter entrées du formulaire + ISSUE 3 Ajouter validation ou messages d'erreur*/
 //(1) Le champ Prénom a un minimum de 2 caractères / n'est pas vide.
-
-inputFirstName.addEventListener("input", function(e){ //listen if #first's input take an user input
-  var value = e.target.value; //get the value of the object that sent the event
-  inputFirstName.onblur = isFirstCorrect  //When inputFirstName lose focus => call the function
-  function isFirstCorrect(){
-    if (value.length < 2) {
-      inputFirstName.classList.add("border-wrong");
-      inputLastName.setCustomValidity("Veuillez entrer 2 caractères ou plus pour le champ du prénom.")
-      let validatorOne = false
-      return validatorOne
-    } else {
-      inputFirstName.classList.add("border-good");
-      let validatorOne = true
-      return validatorOne
-    }
-  }
-  isFirstCorrect()
-});
-
 //(2) Le champ du nom de famille a un minimum de 2 caractères / n'est pas vide. 
 
-// exactly the same as with first name
-inputLastName.addEventListener("input", function(e){
-  var value = e.target.value; 
-  inputLastName.onblur = isFirstCorrect
-  function isFirstCorrect(){
-    if (value.length < 2) {
-      inputLastName.classList.add("border-wrong");
-      inputLastName.setCustomValidity("Veuillez entrer 2 caractères ou plus pour le champ du nom.")
-    } else {
-      inputLastName.classList.add("border-good");
-    }
+function bindEvents(elements, events, callback){ //bind inputs with events to call the function that check inputs length
+  for(let element of elements){ //for every elements 
+      for(let event of events){ // we check every events 
+          element.addEventListener(event, callback) // each combination element-listen-event is bind to (validateMinLengthTwo)
+      }
   }
-});
+}
+
+//the callback that check if length > 2
+function validateMinLengthTwo(e) {
+  let value = e.target.value //get the value of the object that sent the event
+  if (value.length < 2) {
+      e.target.classList.add("border-wrong");
+      e.target.setCustomValidity("Veuillez entrer 2 caractères ou plus.").
+      e.target.reportValidity()
+  } else {
+      e.target.classList.add("border-good");
+  }
+}
+
+//calling blindEvents with the 2 input : first & last names + the events keyup focusout & blur  
+bindEvents([inputFirstName, inputLastName], ["keyup", "focusout", "blur"], validateMinLengthTwo)
+
 
 // (3) L'adresse électronique est valide.
-
 // To respect the HTML5 specification - from developper.mozilla
-var emailRegExp  = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/; //The list of mandatory characters : x@x
+const emailRegExp  = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/; //The list of mandatory characters : x@x
 
 inputMail.addEventListener("input", function(){
-  let goodMail = emailRegExp.test(inputMail.value);// compare regex with  the input and retourn boolean
+  const goodMail = emailRegExp.test(inputMail.value);// compare regex with  the input and retourn boolean
   if(goodMail) { //if true 
     inputMail.classList.add("border-good")
   } else {
     inputMail.classList.add("border-wrong");
-    inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.") 
+    inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.");
+    inputMail.reportValidity();
   }
 })
 
 
 //"Vous devez entrer votre date de naissance."
 inputBirthdate.addEventListener("input", function(e){
-  var value = e.target.value;
-    if (value === "") {
+  const value = e.target.value;
+    if (!value) {
       inputBirthdate.classList.add("border-wrong");
       inputBirthdate.setCustomValidity("Vous devez entrer votre date de naissance.")
-      validatorFour = false
-      return validatorFour
     } else {
       inputBirthdate.classList.add("border-good");
-      validatorFour = true
-      return validatorFour
     }
   }
 );
@@ -108,7 +99,7 @@ inputBirthdate.addEventListener("input", function(e){
 
 // (4) Pour le nombre de concours, une valeur numérique est saisie.
 inputQuantity.addEventListener("input", function(e){
-  var value = e.target.value;
+  const value = e.target.value;
     if (isNaN(value)) {
       inputQuantity.classList.add("border-wrong");
       inputQuantity.setCustomValidity("Vous devez entrer des chiffres")
@@ -126,34 +117,20 @@ const inputRadio = document.querySelector('input[name="location"]:checked')
 // ou
 //const inputRadio2 = reserve.radio['prenom']
 //inputRadio2.value
-var radios = document.getElementsByTagName('radio');
-var value;
-for (var i = 0; i < radios.length; i++) {
+const radios = document.getElementsByTagName('radio');
+let value;
+for (let i = 0; i < radios.length; i++) {
     if (radios[i].type === 'radio' && radios[i].checked) {
         value = radios[i].value; 
         console.log(value)      
     }
   }
 
-// ------ A TESTER----
-/*
-for(i=0; i<document.formulaire.location.length; i++) {
-  if(document.location[i].checked == true) {
-    let checked = 1
-    return checked
-  } else {
-    let checked = 0
-    return checked
-  }
-}
-if(checked == 0) {
-  alert("Veuillez choisir la frequence des visites !");
-  return false;
-}*/
+
 
 // (6) La case des conditions générales est cochée.
 //"Vous devez vérifier que vous acceptez les termes et conditions."
-if(inputCheckbox.checked = true){
+if(inputCheckbox.checked){
   //validatorSeven++
 } else {
   inputCheckbox.setCustomValidity("Vous devez vérifier que vous acceptez les termes et conditions")
@@ -165,31 +142,26 @@ if(inputCheckbox.checked = true){
 // Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation.
 
 // Form : onsubmit="return validate();"
-function validate() {
+function validate(e) {
   validators()//call validator calcul function
-  if(validator == true) { //if validator is true
-    alert("submit")
-  } else {
-    alert("Merci ! Votre réservation a été reçue")
-  }
- alert("test")
+  let alertText = validator ? "Merci ! Votre réservation a été reçue" : "pas bon" ; //if validators is true then alertText = good text else bad txt
+  alert(alertText);
+  if (!validator) {e.preventDefault()}//don't submit if validators are'nt good
 }
 
-//counter of users's input correctly entered
-let validator = false //validator is false
-let validatorOne, validatorTwo, validatorThree, validatorFour, validatorFive, validatorSix, validatorSeven, validatorEight 
+
 //calculates the nubmers of good validator
 function validators(){
-  if(validatorOne) {validator ++}
-  if(validatorTwo) {validator ++}
-  if(validatorThree) {validator ++}
-  if(validatorFour) {validator ++}
-  if(validatorFive) {validator ++}
-  if(validatorSix) {validator ++}
-  if(validatorSeven) {validator ++}
-  if(validatorEight) {validator ++}
-  if(validator = 1) { //if all validators are true validator = 8 
-    validator = true // if validator = 8 validator is true
+  if(validatorOne) {validatorCounter ++} //If validatorOne is correct then validatorCounter is incremented to 8 and validatorBoolean becomes true 
+  if(validatorTwo) {validatorCounter ++}
+  if(validatorThree) {validatorCounter ++}
+  if(validatorFour) {validatorCounter ++}
+  if(validatorFive) {validatorCounter ++}
+  if(validatorSix) {validatorCounter ++}
+  if(validatorSeven) {validatorCounter ++}
+  if(validatorEight) {validatorCounter ++} 
+  if(validatorCounter === 8) { //if all validators are incremented, validatorCounter = 8 
+    validator = true // if validatorCounter = 8, validator is true
   } else {
     validator = false
   }
