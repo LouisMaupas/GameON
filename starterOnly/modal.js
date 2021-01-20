@@ -22,9 +22,8 @@ const modalbg = document.querySelector(".bground"),
   submitBtn = document.getElementById('submit'); //submit btn of form
 
 //counter of users's input correctly entered
-let validatorCounter = 0, //total of validators
-  validatorOne, validatorTwo, validatorThree, validatorFour, validatorFive, validatorSix, validatorSeven, validatorEight, //each validator
-  validatorBoolean; //If all validators are correct then validatorCounter is equal to 8 and validatorBoolean becomes true 
+ let validatorOne, validatorTwo, validatorThree, validatorFour, validatorFive, validatorSix, validatorSeven, validatorEight; //each validator
+
 
 
 // launch modal event 
@@ -55,12 +54,15 @@ function bindEvents(elements, events, callback){ //bind inputs with events to ca
 //the callback that check if length > 2
 function validateMinLengthTwo(e) {
   let value = e.target.value //get the value of the object that sent the event
+  console.log(value)
   if (value.length < 2) {
       e.target.classList.add("border-wrong");
+      e.target.classList.remove("border-good");
       e.target.setCustomValidity("Veuillez entrer 2 caractères ou plus.").
       e.target.reportValidity()
   } else {
       e.target.classList.add("border-good");
+      e.target.classList.remove("border-wrong");
   }
 }
 
@@ -69,13 +71,14 @@ bindEvents([inputFirstName, inputLastName], ["keyup", "focusout", "blur"], valid
 
 
 // (3) L'adresse électronique est valide.
-// To respect the HTML5 specification - from developper.mozilla
-const emailRegExp  = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/; //The list of mandatory characters : x@x
+const emailRegExp  = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //The list of mandatory characters : x@x.xx
 
+// A FACTORISER 
 inputMail.addEventListener("input", function(){
   const goodMail = emailRegExp.test(inputMail.value);// compare regex with  the input and retourn boolean
   if(goodMail) { //if true 
     inputMail.classList.add("border-good")
+    //remove
   } else {
     inputMail.classList.add("border-wrong");
     inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.");
@@ -89,7 +92,9 @@ inputBirthdate.addEventListener("input", function(e){
   const value = e.target.value;
     if (!value) {
       inputBirthdate.classList.add("border-wrong");
+      //remove border
       inputBirthdate.setCustomValidity("Vous devez entrer votre date de naissance.")
+      inputBirthdate.reportValidity()
     } else {
       inputBirthdate.classList.add("border-good");
     }
@@ -97,12 +102,28 @@ inputBirthdate.addEventListener("input", function(e){
 );
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // (4) Pour le nombre de concours, une valeur numérique est saisie.
+// si rempli => radio doit ê coché
 inputQuantity.addEventListener("input", function(e){
   const value = e.target.value;
     if (isNaN(value)) {
       inputQuantity.classList.add("border-wrong");
       inputQuantity.setCustomValidity("Vous devez entrer des chiffres")
+      inputQuantity.reportValidity()
     } else {
       inputQuantity.classList.add("border-good");
     }
@@ -113,32 +134,41 @@ inputQuantity.addEventListener("input", function(e){
 // (5) Un bouton radio est sélectionné. pour les villes
 //"Vous devez choisir une option."
 const inputRadio = document.querySelector('input[name="location"]:checked')
-
-// ou
+// element pas null si champ precedent remplis
 //const inputRadio2 = reserve.radio['prenom']
 //inputRadio2.value
 const radios = document.getElementsByTagName('radio');
-let value;
-for (let i = 0; i < radios.length; i++) {
-    if (radios[i].type === 'radio' && radios[i].checked) {
-        value = radios[i].value; 
-        console.log(value)      
-    }
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 // (6) La case des conditions générales est cochée.
-//"Vous devez vérifier que vous acceptez les termes et conditions."
 if(inputCheckbox.checked){
-  //validatorSeven++
+  validatorEight = true
 } else {
   inputCheckbox.setCustomValidity("Vous devez vérifier que vous acceptez les termes et conditions")
+  inputCheckbox.reportValidity()
 }
 
 
 //ISSUE 4 Ajouter confirmation quand envoie réussi
-/* Après une validation réussie, inclure un message de confirmation de la soumission réussie pour l'utilisateur (ex. "Merci ! Votre réservation a été reçue.") */
 // Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation.
 
 // Form : onsubmit="return validate();"
@@ -152,20 +182,7 @@ function validate(e) {
 
 //calculates the nubmers of good validator
 function validators(){
-  if(validatorOne) {validatorCounter ++} //If validatorOne is correct then validatorCounter is incremented to 8 and validatorBoolean becomes true 
-  if(validatorTwo) {validatorCounter ++}
-  if(validatorThree) {validatorCounter ++}
-  if(validatorFour) {validatorCounter ++}
-  if(validatorFive) {validatorCounter ++}
-  if(validatorSix) {validatorCounter ++}
-  if(validatorSeven) {validatorCounter ++}
-  if(validatorEight) {validatorCounter ++} 
-  if(validatorCounter === 8) { //if all validators are incremented, validatorCounter = 8 
-    validator = true // if validatorCounter = 8, validator is true
-  } else {
-    validator = false
-  }
-  return validator
+  return (validatorOne && validatorTwo && validatorThree && validatorFour && validatorFive && validatorSix && validatorSeven && validatorEight ) //If each validator is correct then validators return TRUE ?
 }
 
 
