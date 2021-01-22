@@ -24,8 +24,6 @@ const modalbg = document.querySelector(".bground"),
 //counter of users's input correctly entered
  let validatorOne, validatorTwo, validatorThree, validatorFour, validatorFive, validatorSix; //each validator
 
-
-
 // launch modal event 
 // All .modal-btn become display block on click
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -54,8 +52,7 @@ function validateMinLengthTwo(e) {
   if (value.length < 2) {
       e.target.classList.add("border-wrong");
       e.target.classList.remove("border-good");
-      e.target.setCustomValidity("Veuillez entrer 2 caractères ou plus."). //TODO Le message reste quand on appuie sur ENTRER même si on corrgie l'erreur  
-      //TODO Uncaught TypeError: Cannot read property 'e' of undefined at HTMLInputElement.validateMinLengthTwo
+      e.target.setCustomValidity("Veuillez entrer 2 caractères ou plus."). //TODO Le message reste quand on appuie sur ENTRER même si on corrgie l'erreur : Uncaught TypeError: Cannot read property 'e' of undefined at HTMLInputElement.validateMinLengthTwo
       e.target.reportValidity()
   } else {
       e.target.classList.add("border-good");
@@ -102,6 +99,9 @@ inputBirthdate.addEventListener("input", function(e){
     }
   }
 );
+
+
+
 
 
 
@@ -175,10 +175,7 @@ if(inputCheckbox.checked){
 }
 
 
-//ISSUE 4 Ajouter confirmation quand envoie réussi
-// Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation.
-
-//A function that calls the validotor and acts on it
+//On submit a function that calls the validotor and acts on it
 function validate(e) {
   validators()//call validator
   let alertText = validators() ? "Merci ! Votre réservation a été reçue" : "pas bon" ; //if validators is true then alertText = good text else bad txt
@@ -197,7 +194,8 @@ let validators = function (){
 
 //TODO ISSUE 5 Tests manuels
 /*
-//Factoriser / fonctions fléchées / ternaires / ... 
+//Factoriser / fonctions fléchées / ternaires / let / var ...
+// Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation. 
 Visualiser et tester l'interface utilisateur dans les dernières versions de Chrome et de Firefox, 
 ainsi que dans les versions mobile et desktop. 
 Corriger les erreurs d'affichage existantes.
