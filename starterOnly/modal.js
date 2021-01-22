@@ -22,7 +22,7 @@ const modalbg = document.querySelector(".bground"),
   submitBtn = document.getElementById('submit'); //submit btn of form
 
 //counter of users's input correctly entered
- let validatorOne, validatorTwo, validatorThree, validatorFour, validatorFive, validatorSix, validatorSeven, validatorEight; //each validator
+ let validatorOne, validatorTwo, validatorThree, validatorFour, validatorFive, validatorSix; //each validator
 
 
 
@@ -39,10 +39,7 @@ function launchModal() {
 close.addEventListener("click", () => modalbg.style.display = "none");
 
 
-/*ISSUE 2 Implémenter entrées du formulaire + ISSUE 3 Ajouter validation ou messages d'erreur*/
-//(1) Le champ Prénom a un minimum de 2 caractères / n'est pas vide.
-//(2) Le champ du nom de famille a un minimum de 2 caractères / n'est pas vide. 
-
+// A function to bind the first and last name inputs to user input events with the function that checks the inputs
 function bindEvents(elements, events, callback){ //bind inputs with events to call the function that check inputs length
   for(let element of elements){ //for every elements 
       for(let event of events){ // we check every events 
@@ -54,15 +51,16 @@ function bindEvents(elements, events, callback){ //bind inputs with events to ca
 //the callback that check if length > 2
 function validateMinLengthTwo(e) {
   let value = e.target.value //get the value of the object that sent the event
-  console.log(value)
   if (value.length < 2) {
       e.target.classList.add("border-wrong");
       e.target.classList.remove("border-good");
-      e.target.setCustomValidity("Veuillez entrer 2 caractères ou plus.").
+      e.target.setCustomValidity("Veuillez entrer 2 caractères ou plus."). //TODO Le message reste quand on appuie sur ENTRER même si on corrgie l'erreur  
+      //TODO Uncaught TypeError: Cannot read property 'e' of undefined at HTMLInputElement.validateMinLengthTwo
       e.target.reportValidity()
   } else {
       e.target.classList.add("border-good");
       e.target.classList.remove("border-wrong");
+      validatorOne = true
   }
 }
 
@@ -70,33 +68,37 @@ function validateMinLengthTwo(e) {
 bindEvents([inputFirstName, inputLastName], ["keyup", "focusout", "blur"], validateMinLengthTwo)
 
 
-// (3) L'adresse électronique est valide.
+//A regex for email addresses
 const emailRegExp  = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //The list of mandatory characters : x@x.xx
 
-// A FACTORISER 
+//A function that checks if the input is an email address
 inputMail.addEventListener("input", function(){
   const goodMail = emailRegExp.test(inputMail.value);// compare regex with  the input and retourn boolean
   if(goodMail) { //if true 
     inputMail.classList.add("border-good")
-    //remove
+    inputMail.classList.remove("border-wrong")
+    validatorTwo = true
   } else {
     inputMail.classList.add("border-wrong");
+    inputMail.classList.remove("border-good");
     inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.");
     inputMail.reportValidity();
   }
 })
 
 
-//"Vous devez entrer votre date de naissance."
+//A function that checks if the input is a birthdate
 inputBirthdate.addEventListener("input", function(e){
   const value = e.target.value;
     if (!value) {
       inputBirthdate.classList.add("border-wrong");
-      //remove border
+      inputBirthdate.classList.remove("border-good");
       inputBirthdate.setCustomValidity("Vous devez entrer votre date de naissance.")
       inputBirthdate.reportValidity()
     } else {
       inputBirthdate.classList.add("border-good");
+      inputBirthdate.classList.remove("border-wrong");
+      validatorThree = true
     }
   }
 );
@@ -111,31 +113,36 @@ inputBirthdate.addEventListener("input", function(e){
 
 
 
-
-
-
-
+//TODO Si le champ innputQuantity n'est pas égale à 0 ou vide => Une radio doit être selectionné
 
 // (4) Pour le nombre de concours, une valeur numérique est saisie.
-// si rempli => radio doit ê coché
 inputQuantity.addEventListener("input", function(e){
   const value = e.target.value;
     if (isNaN(value)) {
       inputQuantity.classList.add("border-wrong");
+      inputQuantity.classList.remove("border-good");
       inputQuantity.setCustomValidity("Vous devez entrer des chiffres")
       inputQuantity.reportValidity()
     } else {
       inputQuantity.classList.add("border-good");
+      inputQuantity.classList.remove("border-wrong");
     }
   }
 );
 
 
+let radioRequired = function() {
+  if(inputQuantity.value != "" ) {
+    document.getElementById(location1).classList.add("required")
+    alert("ça marche")
+  } else {
+     alert ("pas lol")}
+     document.getElementById(location).classList.remove("required")
+}
+
 // (5) Un bouton radio est sélectionné. pour les villes
 //"Vous devez choisir une option."
 const inputRadio = document.querySelector('input[name="location"]:checked')
-// element pas null si champ precedent remplis
-//const inputRadio2 = reserve.radio['prenom']
 //inputRadio2.value
 const radios = document.getElementsByTagName('radio');
 
@@ -159,9 +166,9 @@ const radios = document.getElementsByTagName('radio');
 
 
 
-// (6) La case des conditions générales est cochée.
+//A function that checks if the general conditions box is checked
 if(inputCheckbox.checked){
-  validatorEight = true
+  validatorSix = true
 } else {
   inputCheckbox.setCustomValidity("Vous devez vérifier que vous acceptez les termes et conditions")
   inputCheckbox.reportValidity()
@@ -171,23 +178,26 @@ if(inputCheckbox.checked){
 //ISSUE 4 Ajouter confirmation quand envoie réussi
 // Conserver les données du formulaire (ne pas effacer le formulaire) lorsqu'il ne passe pas la validation.
 
-// Form : onsubmit="return validate();"
+//A function that calls the validotor and acts on it
 function validate(e) {
-  validators()//call validator calcul function
-  let alertText = validator ? "Merci ! Votre réservation a été reçue" : "pas bon" ; //if validators is true then alertText = good text else bad txt
+  validators()//call validator
+  let alertText = validators() ? "Merci ! Votre réservation a été reçue" : "pas bon" ; //if validators is true then alertText = good text else bad txt
   alert(alertText);
-  if (!validator) {e.preventDefault()}//don't submit if validators are'nt good
+  if (!validators) {e.preventDefault()}//if validators = false don't submit
+}
+
+//calculates if all validators are true
+let validators = function (){
+  return (validatorOne && validatorTwo && validatorThree && validatorFour && validatorFive && validatorSix) // Only if each validator is true then validators return TRUE
 }
 
 
-//calculates the nubmers of good validator
-function validators(){
-  return (validatorOne && validatorTwo && validatorThree && validatorFour && validatorFive && validatorSix && validatorSeven && validatorEight ) //If each validator is correct then validators return TRUE ?
-}
 
 
-//ISSUE 5 Tests manuels
+
+//TODO ISSUE 5 Tests manuels
 /*
+//Factoriser / fonctions fléchées / ternaires / ... 
 Visualiser et tester l'interface utilisateur dans les dernières versions de Chrome et de Firefox, 
 ainsi que dans les versions mobile et desktop. 
 Corriger les erreurs d'affichage existantes.
