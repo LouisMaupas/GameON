@@ -190,6 +190,7 @@ let validators = function (){
 
 
 
+//TODO tester classListToggle('class').
 
 
 //TODO ISSUE 5 Tests manuels
