@@ -25,10 +25,15 @@ const modalbg = document.querySelector(".bground"),
   loc3 = document.getElementById('location3'),
   loc4 = document.getElementById('location4'),
   loc5 = document.getElementById('location5'),
-  loc6 = document.getElementById('location6');
+  loc6 = document.getElementById('location6'),
+  formId = document.getElementById("form-id"); //submit btn
 
 //counter of users's input correctly entered
- let validatorOne, validatorTwo, validatorThree, validatorFour, validatorFive, validatorSix; //each validator
+ let validatorOne = false, 
+  validatorTwo = false, 
+  validatorThree = false, 
+  validatorFour = false,//each validator
+  validatorFive = false;
 
 // launch modal event 
 // All .modal-btn become display block on click
@@ -52,20 +57,23 @@ function bindEvents(elements, events, callback){ //bind inputs with events to ca
   }
 }
 
+
 //the callback that check if length > 2
 function validateMinLengthTwo(e) {
   let value = e.target.value //get the value of the object that sent the event
   if (value.length < 2) {
       e.target.classList.add("border-wrong");
       e.target.classList.remove("border-good");
-      e.target.setCustomValidity("Veuillez entrer 2 caractères ou plus."). //TODO Le message revient quand on appuie sur ENTRER même si on corrgie l'erreur : Uncaught TypeError: Cannot read property 'e' of undefined at HTMLInputElement.validateMinLengthTwo
+      e.target.setCustomValidity("Veuillez entrer 2 caractères ou plus."). 
       e.target.reportValidity()
   } else {
       e.target.classList.add("border-good");
       e.target.classList.remove("border-wrong");
+      e.target.setCustomValidity(""). 
       validatorOne = true
   }
 }
+
 
 //calling blindEvents with the 2 input : first & last names + the events keyup focusout & blur  
 bindEvents([inputFirstName, inputLastName], ["keyup", "focusout", "blur"], validateMinLengthTwo)
@@ -76,10 +84,11 @@ const emailRegExp  = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //The list of mandatory
 
 //A function that checks if the input is an email address
 inputMail.addEventListener("input", function(){
-  const goodMail = emailRegExp.test(inputMail.value);// compare regex with  the input and retourn boolean
+  let goodMail = emailRegExp.test(inputMail.value);// compare regex with  the input and retourn boolean
   if(goodMail) { //if true 
     inputMail.classList.add("border-good")
     inputMail.classList.remove("border-wrong")
+    inputMail.setCustomValidity("");
     validatorTwo = true
   } else {
     inputMail.classList.add("border-wrong");
@@ -102,6 +111,7 @@ inputBirthdate.addEventListener("input", function(e){
     } else {
       inputBirthdate.classList.add("border-good");
       inputBirthdate.classList.remove("border-wrong");
+      inputBirthdate.setCustomValidity("")
       inputBirthdate.focus();
       validatorThree = true
     }
@@ -114,77 +124,68 @@ inputQuantity.addEventListener("input", function(e){
     if (isNaN(value)) {
       inputQuantity.classList.add("border-wrong");
       inputQuantity.classList.remove("border-good");
-      inputQuantity.setCustomValidity("Vous devez entrer des chiffres")
+      inputQuantity.setCustomValidity("Vous devez entrer des chiffres");
       inputQuantity.reportValidity()
       inputQuantity.focus();
     } else {
       inputQuantity.classList.add("border-good");
       inputQuantity.classList.remove("border-wrong");
-      radioRequired()
+      inputQuantity.setCustomValidity("");
     }
   }
 );
 
-//TODO marche pas 
-/*
+
 //A function that forces the user to check a city if he filled the #quantity field
 let radioChecked = function () {
-    //check if a radio is checked
-  if (loc1.checked || loc2.checked || loc3.checked || loc4.checked || loc5.checked || loc6.checked) {
-    //check if inputQuantity is properly filled
-    if (inputQuantity.value === "" || inputQuantity.value === 0 ) {
-      document.getElementById(location).classList.add("required");
-      document.getElementById(location).focus();
-      document.getElementById(location).setCustomValidity("Vous devez préciser à combien de tournois GameOn vous avez participé");
-      document.getElementById(location).reportValidity();
-      inputQuantity.classList.remove("border-wrong");
+  if (inputQuantity.value != "" || inputQuantity.value != 0 ) { //check if inputQuantity is properly filled
+    if (loc1.checked || loc2.checked || loc3.checked || loc4.checked || loc5.checked || loc6.checked) { //check if a radio is checked
+      document.getElementById(location1).setCustomValidity("");
+      validatorFive = true;
     } else {
-      document.getElementById(location).classList.remove("required");
+      alert("false avant ")
+      document.getElementById(location1).classList.add("required");
+      document.getElementById(location1).focus();
+      document.getElementById(location1).setCustomValidity("Vous devez préciser à combien de tournois GameOn vous avez participé");
+      document.getElementById(location1).reportValidity();
+      inputQuantity.classList.remove("border-wrong");
+      validatorFive = false;
+      alert("false après ") //TODO ca bug pour trouver location car document.getElementById(location1) = null
     }
-  }
-}*/
-
-//A function that forces the user to check a city if he filled the #quantity field
-let radioChecked = function () {
-if (inputQuantity.value != "" || inputQuantity.value != 0 ) { //check if inputQuantity is properly filled
-  if (loc1.checked || loc2.checked || loc3.checked || loc4.checked || loc5.checked || loc6.checked) { //check if a radio is checked
-    console.log("good")
   } else {
-    document.getElementById(location1).classList.add("required");
-    document.getElementById(location).focus();
-    document.getElementById(location).setCustomValidity("Vous devez préciser à combien de tournois GameOn vous avez participé");
-    document.getElementById(location).reportValidity();
-    inputQuantity.classList.remove("border-wrong");
+    validatorFive = true;
   }
 }
-}
 
-//TODO MARCHE PAS
 //A function that checks if the general conditions box is checked
 function checkCheckbox() {
-  if(inputCheckbox.checked){
+  if(inputCheckbox.checked ){
     validatorFour = true
-    alert("ça marche")
+    inputCheckbox.setCustomValidity("")
   } else {
     inputCheckbox.setCustomValidity("Vous devez vérifier que vous acceptez les termes et conditions")
     inputCheckbox.reportValidity()
   }
 }
 
-
-
-//On submit a function that calls the validotor and acts on it
+//A function that calls the validotor and acts on it
 function validate(e) {
-  e.preventDefault
-  radioChecked()
-  checkCheckbox()
-  validators() 
-  let alertText = validators() ? "Merci ! Votre réservation a été reçue" : "pas bon" ; //if validators is true then alertText = good text else bad txt
+  radioChecked();
+  checkCheckbox();
+  validators() ;
+  let alertText = validators() ? "Merci ! Votre réservation a été reçue" : "Certains champs du formulaire ne sont pas remplit correctement" ; //if validators is true then alertText = good text else bad txt
   alert(alertText);
-  if (!validators) {e.preventDefault()}//if validators = false don't submit
+  if (!validators) {
+    e.preventDefault() //TODO ne marche pas //if validators = false don't submit
+    alert("relou")
+  }
 }
 
 //calculates if all validators are true
 function validators (){
-  return (validatorOne && validatorTwo && validatorThree && validatorFour && validatorFive && validatorSix) // Only if each validator is true then validators return TRUE
+  return (validatorOne && validatorTwo && validatorThree && validatorFour && validatorFive) // Only if each validator is true then validators return TRUE
 }
+
+formId.addEventListener("submit", function(e){ 
+  validate();
+})

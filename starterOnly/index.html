@@ -52,13 +52,21 @@
           <!-- BOUTON TO CLOSE-->
           <span class="close"></span>
           <div class="modal-body">
-            <!--FORMULAIRE 1 INFOS -->
+            <!--FORMULAIRE INFOS -->
+            <form
+              id="form-id"
+              name="reserve"
+              action="index.html"
+              method="get"
+            >
+<!--
             <form
               name="reserve"
               action="index.html"
               method="get"
               onsubmit="return validate()"
             >
+-->
               <!--first name-->
               <div class="formData">
                 <label for="first" >Prénom</label><br>
@@ -182,7 +190,7 @@
                 id="checkbox1"
                 checked
                 />
-                <label class="checkbox2-label" for="checkbox1" required><span class="checkbox-icon"></span>J'ai lu et accepté les conditions d'utilisation.</label>
+                <label class="checkbox2-label" for="checkbox1" ><span class="checkbox-icon"></span>J'ai lu et accepté les conditions d'utilisation.</label>
                 <br>
                 <!--checkbox-->
                 <input 
