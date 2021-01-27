@@ -95,14 +95,18 @@ inputMail.addEventListener("input", function(){
 //A function that checks if the input is a birthdate
 inputBirthdate.addEventListener("input", function(e){
   const value = e.target.value;
-    if (!value) {
-      birthDiv.classList.remove("display-none");
-    } else {
-      birthDiv.classList.add("display-none");
-      validatorThree = true
-    }
+  if (value) {
+    birthDiv.classList.add("display-none");
+    inputBirthdate.classList.add("border-good");
+    inputBirthdate.classList.remove("border-wrong");
+    validatorThree = true;
+  } else {
+    birthDiv.classList.remove("display-none");
+    inputBirthdate.classList.add("border-wrong");
+    inputBirthdate.classList.remove("border-good");
+    validatorThree = false;
   }
-);
+})
 
 //A function that keep the radio checked
 function keepRadio(){
