@@ -1,3 +1,9 @@
+//TODO RESTE A FAIRE 
+//=> regler le probleme des radios impossible à selectionner pour afficher setCustomValidity [document.getElementById(location1) = null] // document.querySelector('input[name=location]').value //renvoi NY
+//=> setCustomValidity() ne fonctionne pas sur les radios
+//=>setCustomValidity() ne fonctionne pas sur checkbox
+// e.preventdefault sur le submit NE FONCTIONNE PAS => du coup la case a cocher des conditions generales n'est pas bloquante si non cochée
+
 //Only if header has .topnav class we add .responsive class otherwise we remove others class (add exclusively .topnav)
 function editNav() { //called lines 26 HTML
   const x = document.getElementById("myTopnav");
@@ -20,12 +26,14 @@ const modalbg = document.querySelector(".bground"),
   inputBirthdate = document.getElementById('birthdate'), // birthdate
   inputCheckbox = document.getElementById('checkbox1'), //terms of use
   submitBtn = document.getElementById('submit'), //submit btn of form
+  loc = document.getElementById('location'), // select all the locations
   loc1 = document.getElementById('location1'), //select location NewYork
-  loc2 = document.getElementById('location2'), //select location
+  loc2 = document.getElementById('location2'), //select location 2
   loc3 = document.getElementById('location3'),
   loc4 = document.getElementById('location4'),
   loc5 = document.getElementById('location5'),
   loc6 = document.getElementById('location6'),
+  form = document.querySelector('form'), // select all the form
   formId = document.getElementById("form-id"); //submit btn
 
 //counter of users's input correctly entered
@@ -69,11 +77,10 @@ function validateMinLengthTwo(e) {
   } else {
       e.target.classList.add("border-good");
       e.target.classList.remove("border-wrong");
-      e.target.setCustomValidity(""). 
+      e.target.setCustomValidity("");
       validatorOne = true
   }
 }
-
 
 //calling blindEvents with the 2 input : first & last names + the events keyup focusout & blur  
 bindEvents([inputFirstName, inputLastName], ["keyup", "focusout", "blur"], validateMinLengthTwo)
@@ -99,7 +106,6 @@ inputMail.addEventListener("input", function(){
   }
 })
 
-
 //A function that checks if the input is a birthdate
 inputBirthdate.addEventListener("input", function(e){
   const value = e.target.value;
@@ -118,6 +124,17 @@ inputBirthdate.addEventListener("input", function(e){
   }
 );
 
+//A function that keep the radio checked
+//loc.addEventListener('change', function () { //
+function keepRadio(){
+  let radios = document.querySelectorAll('input'); //select all the inputs of all the form 
+  for (var i = 0; i < radios.length; i++) { //big scope var that check all the radios
+    if ( radios[i].checked === true ) break; //stop when he meet a checked radio
+  }
+  let radioValue = radios[i].value;		
+  return radioValue
+}
+
 //A function that checks if the quantity's input is a number
 inputQuantity.addEventListener("input", function(e){
   const value = e.target.value;
@@ -135,36 +152,72 @@ inputQuantity.addEventListener("input", function(e){
   }
 );
 
-
 //A function that forces the user to check a city if he filled the #quantity field
 let radioChecked = function () {
   if (inputQuantity.value != "" || inputQuantity.value != 0 ) { //check if inputQuantity is properly filled
-    if (loc1.checked || loc2.checked || loc3.checked || loc4.checked || loc5.checked || loc6.checked) { //check if a radio is checked
-      document.getElementById(location1).setCustomValidity("");
+    keepRadio()
+    if(keepRadio() != "on") { //check if a radio is checked
       validatorFive = true;
-    } else {
+      loc.setCustomValidity("");
+    } else { //TODO ca bug pour trouver location car document.getElementById(location1) = null
       alert("false avant ")
+      /*
+      loc.classList.add("required");
+      loc.focus();
+      loc.setCustomValidity("Vous devez choisir une option");
+      loc.reportValidity();
+      */
+      /*
       document.getElementById(location1).classList.add("required");
       document.getElementById(location1).focus();
-      document.getElementById(location1).setCustomValidity("Vous devez préciser à combien de tournois GameOn vous avez participé");
+      document.getElementById(location1).setCustomValidity("Vous devez choisir une option");
       document.getElementById(location1).reportValidity();
+      */
       inputQuantity.classList.remove("border-wrong");
       validatorFive = false;
-      alert("false après ") //TODO ca bug pour trouver location car document.getElementById(location1) = null
+      alert("false après ") 
     }
   } else {
     validatorFive = true;
   }
 }
 
+/*
+//A function that forces the user to check a city if he filled the #quantity field
+let radioChecked = function () {
+  if (inputQuantity.value != "" || inputQuantity.value != 0 ) { //check if inputQuantity is properly filled
+      if (loc1.checked || loc2.checked || loc3.checked || loc4.checked || loc5.checked || loc6.checked) { //check if a radio is checked
+      document.getElementById(location1).setCustomValidity("");
+      validatorFive = true;
+    } else {
+      alert("false avant ")
+      loc.classList.add("required");
+      loc.focus();
+      loc.setCustomValidity("Vous devez choisir une option");
+      loc.reportValidity();
+      /*document.getElementById(location1).classList.add("required");
+      document.getElementById(location1).focus();
+      document.getElementById(location1).setCustomValidity("Vous devez choisir une option");
+      document.getElementById(location1).reportValidity();
+      inputQuantity.classList.remove("border-wrong");
+      validatorFive = false;
+      alert("false après ") //
+    }
+  } else {
+    validatorFive = true;
+  }
+}
+*/
+
 //A function that checks if the general conditions box is checked
 function checkCheckbox() {
   if(inputCheckbox.checked ){
-    validatorFour = true
-    inputCheckbox.setCustomValidity("")
-  } else {
-    inputCheckbox.setCustomValidity("Vous devez vérifier que vous acceptez les termes et conditions")
-    inputCheckbox.reportValidity()
+    validatorFour = true;
+    inputCheckbox.setCustomValidity("");
+  } else { //TODO PAS BLOQUANT ? VOIR LE TODO BIS
+    inputCheckbox.setCustomValidity("Vous devez vérifier que vous acceptez les termes et conditions"); //*TODO NE MARCHE PAS (mais fonctionne avec forme de alert(""))
+    inputCheckbox.reportValidity();
+    validatorFour = false;
   }
 }
 
@@ -176,15 +229,14 @@ function validate(e) {
   let alertText = validators() ? "Merci ! Votre réservation a été reçue" : "Certains champs du formulaire ne sont pas remplit correctement" ; //if validators is true then alertText = good text else bad txt
   alert(alertText);
   if (!validators) {
-    e.preventDefault() //TODO ne marche pas //if validators = false don't submit
-    alert("relou")
+    e.preventDefault() //TODO BIS ne marche pas //if validators = false don't submit
   }
 }
 
 //calculates if all validators are true
 function validators (){
   return (validatorOne && validatorTwo && validatorThree && validatorFour && validatorFive) // Only if each validator is true then validators return TRUE
-}
+} 
 
 formId.addEventListener("submit", function(e){ 
   validate();

@@ -8,8 +8,8 @@
   margin: 0;
   padding: 0;
 }
-/* Landing Page */
 
+/* Landing Page */
 body {
   margin: 0;
   display: flex;
@@ -445,6 +445,7 @@ input[data-error]::after {
   font-weight: normal;
   margin-top: 57px;
   padding: 0;
+  
 }
 .btn-signup {
   outline: none;
@@ -499,7 +500,7 @@ footer {
     white-space: normal;
   }
   .hero-text {
-    width: unset;
+    width: 250px;
     font-size: 1.5rem;
   }
   .hero-img img {
