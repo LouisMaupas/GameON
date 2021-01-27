@@ -528,7 +528,6 @@ footer {
   }
 }
 
-
 /* AJOUT PERSO */
 
 .border-wrong {
@@ -541,7 +540,7 @@ footer {
   box-shadow: 0 0 5px 1px green;
 }
 
-
+/* POUR LE RESPONSIV */
 @media screen and (max-width: 413px) {
   .hero-headline {
     font-size: 1.6rem;
