@@ -166,7 +166,7 @@ function checkCheckbox() {
 function validate(e) {
   radioChecked();
   checkCheckbox();
-  let alertText = validators() ? "Merci ! Votre réservation a été reçue" : "Certains champs du formulaire ne sont pas remplit correctement" ; //if validators is true then alertText = good text else bad txt
+  let alertText = validators() ? "Merci ! Votre réservation a été reçue" : "Certains champs du formulaire ne sont pas rempli correctement" ; //if validators is true then alertText = good text else bad txt
   alert(alertText);
   if (!validators()) {
     e.preventDefault()
