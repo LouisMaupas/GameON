@@ -21,14 +21,11 @@ const modalbg = document.querySelector(".bground"),
   inputCheckbox = document.getElementById('checkbox1'), //terms of use
   submitBtn = document.getElementById('submit'), //submit btn of form
   loc = document.getElementById('location'), // select all the locations
-  loc1 = document.getElementById('location1'), //select location NewYork
-  loc2 = document.getElementById('location2'), //select location 2
-  loc3 = document.getElementById('location3'),
-  loc4 = document.getElementById('location4'),
-  loc5 = document.getElementById('location5'),
-  loc6 = document.getElementById('location6'),
   form = document.querySelector('form'), // select all the form
-  formId = document.getElementById("form-id"); //submit btn
+  formId = document.getElementById("form-id"), //submit btn
+  checkCheckboxDiv = document.getElementById("checkCheckboxDiv"), // hidden div for error message at checkbox
+  radioDiv = document.getElementById("radioDiv"), // with radio's error
+  birthDiv = document.getElementById("birthDiv"); //birthdate
 
 //counter of users's input correctly entered
  let validatorOne = false, 
@@ -99,22 +96,15 @@ inputMail.addEventListener("input", function(){
 inputBirthdate.addEventListener("input", function(e){
   const value = e.target.value;
     if (!value) {
-      inputBirthdate.classList.add("border-wrong");
-      inputBirthdate.classList.remove("border-good");
-      inputBirthdate.setCustomValidity("Vous devez entrer votre date de naissance.")
-      inputBirthdate.reportValidity()
+      birthDiv.classList.remove("display-none");
     } else {
-      inputBirthdate.classList.add("border-good");
-      inputBirthdate.classList.remove("border-wrong");
-      inputBirthdate.setCustomValidity("")
-      inputBirthdate.focus();
+      birthDiv.classList.add("display-none");
       validatorThree = true
     }
   }
 );
 
 //A function that keep the radio checked
-//loc.addEventListener('change', function () { //
 function keepRadio(){
   let radios = document.querySelectorAll('input'); //select all the inputs of all the form 
   for (var i = 0; i < radios.length; i++) { //big scope var that check all the radios
@@ -147,9 +137,10 @@ let radioChecked = function () {
     keepRadio()
     if(keepRadio() != "on") { //check if a radio is checked
       validatorFive = true;
+      radioDiv.classList.add("display-none") // remove the error message
     } else {
       validatorFive = false;
-      alert("Vous devez choisir une option") 
+      radioDiv.classList.remove("display-none") //add an error message by removing the display:none property of the div
     }
   } else {
     validatorFive = true;
@@ -160,8 +151,9 @@ let radioChecked = function () {
 function checkCheckbox() {
   if(inputCheckbox.checked ){
     validatorFour = true;
+    checkCheckboxDiv.classList.add("display-none");
   } else { 
-    alert("Vous devez vérifier que vous acceptez les termes et conditions");
+    checkCheckboxDiv.classList.remove("display-none");
     validatorFour = false;
   }
 }
