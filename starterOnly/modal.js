@@ -1,13 +1,3 @@
-//Only if header has .topnav class we add .responsive class otherwise we remove others class (add exclusively .topnav)
-function editNav() { //called lines 26 HTML
-  const x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
-}
-
 // DOM Elements
 const modalbg = document.querySelector(".bground"),
   modalBtn = document.querySelectorAll(".modal-btn"),
@@ -34,9 +24,20 @@ const modalbg = document.querySelector(".bground"),
   validatorFour = false,//each validator
   validatorFive = false;
 
+//Only if header has .topnav class we add .responsive class otherwise we remove others class (add exclusively .topnav)
+function editNav() { //called lines 26 HTML
+  const x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+
 // launch modal event 
 // All .modal-btn become display block on click
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
+
 // launch modal form
 function launchModal() {
   modalbg.style.display = "block";
