@@ -1,7 +1,7 @@
 // DOM Elements
-const modalbg = document.querySelector(".bground"),
-  modalBtn = document.querySelectorAll(".modal-btn"),
-  formData = document.querySelectorAll(".formData"),
+const modalbg = document.querySelector(".bground"),// select the modal window
+  modalBtn = document.querySelectorAll(".modal-btn"), // select subscrib button
+  formData = document.querySelectorAll(".formData"), //the class of each input
   close = document.querySelector(".close"), // select btn closing modal
   inputFirstName = document.getElementById("first"), // select first name in form input
   inputLastName = document.getElementById("last"), // last name
@@ -15,17 +15,11 @@ const modalbg = document.querySelector(".bground"),
   formId = document.getElementById("form-id"), //submit btn
   checkCheckboxDiv = document.getElementById("checkCheckboxDiv"), // hidden div for error message at checkbox
   radioDiv = document.getElementById("radioDiv"), // with radio's error
-  birthDiv = document.getElementById("birthDiv"); //birthdate
-
-//counter of users's input correctly entered
- let validatorOne = false, 
-  validatorTwo = false, 
-  validatorThree = false, 
-  validatorFour = false,//each validator
-  validatorFive = false;
+  birthDiv = document.getElementById("birthDiv"), //birthdate
+  nameDiv = document.getElementById("nameDiv"); // names
 
 //Only if header has .topnav class we add .responsive class otherwise we remove others class (add exclusively .topnav)
-function editNav() { //called lines 26 HTML
+function editNav() {
   const x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
     x.className += " responsive";
@@ -42,6 +36,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 function launchModal() {
   modalbg.style.display = "block";
 }
+
 // On click change modalbg display to "none"
 close.addEventListener("click", () => modalbg.style.display = "none");
 
@@ -54,19 +49,34 @@ function bindEvents(elements, events, callback){ //bind inputs with events to ca
   }
 }
 
+//A regex for name
+let nameRegExp = /^[a-zA-Z]*$/;
+
 //the callback that check if length > 2
 function validateMinLengthTwo(e) {
   let value = e.target.value //get the value of the object that sent the event
-  if (value.length < 2) {
+  let goodName = nameRegExp.test(value);// compare regex with the input and retourn boolean
+  if(goodName) {
+    if (value.length < 2) {
+      nameDiv.classList.add("display-none");
       e.target.classList.add("border-wrong");
       e.target.classList.remove("border-good");
       e.target.setCustomValidity("Veuillez entrer 2 caractères ou plus."). 
       e.target.reportValidity()
+      validatorOne = false
   } else {
+      nameDiv.classList.add("display-none");
       e.target.classList.add("border-good");
       e.target.classList.remove("border-wrong");
       e.target.setCustomValidity("");
       validatorOne = true
+  }
+  } else {
+    validatorOne = false
+    e.target.classList.add("border-wrong");
+    e.target.classList.remove("border-good");
+    nameDiv.classList.remove("display-none");
+    e.target.reportValidity()
   }
 }
 
@@ -89,16 +99,20 @@ inputMail.addEventListener("input", function(){
     inputMail.classList.remove("border-good");
     inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.");
     inputMail.reportValidity();
+    validatorTwo = false
   }
 })
 
-
-const dateRegExp = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/; //The list of mandatory characters 
+//Regex date
+const dateRegExpUsa = /([12]\d{3}(\/|-)(0[1-9]|1[0-2])(\/|-)(0[1-9]|[12]\d|3[01]))/, //The list of mandatory characters for an USA date format 
+  dateRegExpFR = /^([0-2][0-9]|(3)[0-1])(\/|-|:)(((0)[0-9])|((1)[0-2]))(\/|-|:)\d{4}$/; // Fr format
+    
 
 //A function that checks if the input is a date
 inputBirthdate.addEventListener("input", function(){
-  let goodDate = dateRegExp.test(inputBirthdate.value);// compare regex with  the input and retourn boolean
-  if(goodDate) { //if true 
+  let goodDateUsa = dateRegExpUsa.test(inputBirthdate.value);// compare regex with the input and retourn boolean => USA
+  let goodDateFr = dateRegExpFR.test(inputBirthdate.value); //same with fr
+  if(goodDateUsa || goodDateFr ) { //if true 
     inputBirthdate.classList.add("border-good")
     inputBirthdate.classList.remove("border-wrong")
     birthDiv.classList.add("display-none");
@@ -110,16 +124,6 @@ inputBirthdate.addEventListener("input", function(){
     validatorThree = false
   }
 })
-
-//A function that keep the radio checked
-function keepRadio(){
-  let radios = document.querySelectorAll('input'); //select all the inputs of all the form 
-  for (var i = 0; i < radios.length; i++) { //big scope var that check all the radios
-    if ( radios[i].checked === true ) break; //stop when he meet a checked radio
-  }
-  let radioValue = radios[i].value;		
-  return radioValue
-}
 
 //A function that checks if the quantity's input is a number
 inputQuantity.addEventListener("input", function(e){
@@ -136,6 +140,16 @@ inputQuantity.addEventListener("input", function(e){
     }
   }
 );
+
+//A function that keep the value of a checked radio 
+function keepRadio(){
+  let radios = document.querySelectorAll('input'); //select all the inputs of all the form 
+  for (var i = 0; i < radios.length; i++) { //big scope var that check all the radios
+    if ( radios[i].checked === true ) break; //stop when he meet a checked radio
+  }
+  let radioValue = radios[i].value;		
+  return radioValue
+}
 
 //A function that forces the user to check a city if he filled the #quantity field
 let radioChecked = function () {
@@ -174,11 +188,6 @@ function validate(e) {
     e.preventDefault()
   }
 }
-
-//calculates if all validators are true
-function validators (){
-  return (validatorOne && validatorTwo && validatorThree && validatorFour && validatorFive) // Only if each validator is true then validators return TRUE
-} 
 
 formId.addEventListener("submit", function(e){
   validate(e);

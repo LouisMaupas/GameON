@@ -81,6 +81,7 @@
                   required
                 /><br>
               </div>
+              <div id="nameDiv" class="display-none error">Les champs "Prénom" et "Nom" ne peuvent contenir que des lettres</div>
               <!--mail-->
               <div class="formData">
                 <label for="email">E-mail</label><br>
@@ -102,7 +103,7 @@
                   name="birthdate"
                   required
                 />
-                <div id="birthDiv" class="display-none error">Vous devez entrer votre date de naissance.</div>
+                <div id="birthDiv" class="display-none error">Vous devez entrer votre date de naissance.<br/>Au format JJ/MM/AAAA (ou JJ-MM-AAAA ou en version anglosaxonne.</div>
               </div>
               <br>
               <!-- FORMUALIRE 2 QUANTITY-->
@@ -213,5 +214,6 @@
       </p>
     </footer>
     <script src="modal.js"></script>
+    <script src="validator.js"></script>
   </body>
 </html>
