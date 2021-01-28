@@ -73,7 +73,7 @@ function validateMinLengthTwo(e) {
 bindEvents([inputFirstName, inputLastName], ["keyup", "focusout", "blur"], validateMinLengthTwo)
 
 //A regex for email addresses
-const emailRegExp  = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //The list of mandatory characters : x@x.xx
+const emailRegExp  = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //The list of mandatory characters
 
 //A function that checks if the input is an email address
 inputMail.addEventListener("input", function(){
@@ -88,23 +88,25 @@ inputMail.addEventListener("input", function(){
     inputMail.classList.remove("border-good");
     inputMail.setCustomValidity("Veuillez entrer une adresse électronique valide.");
     inputMail.reportValidity();
-    inputMail.focus();
   }
 })
 
-//A function that checks if the input is a birthdate
-inputBirthdate.addEventListener("input", function(e){
-  const value = e.target.value;
-  if (value) {
+
+const dateRegExp = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/; //The list of mandatory characters 
+
+//A function that checks if the input is a date
+inputBirthdate.addEventListener("input", function(){
+  let goodDate = dateRegExp.test(inputBirthdate.value);// compare regex with  the input and retourn boolean
+  if(goodDate) { //if true 
+    inputBirthdate.classList.add("border-good")
+    inputBirthdate.classList.remove("border-wrong")
     birthDiv.classList.add("display-none");
-    inputBirthdate.classList.add("border-good");
-    inputBirthdate.classList.remove("border-wrong");
-    validatorThree = true;
+    validatorThree = true
   } else {
     birthDiv.classList.remove("display-none");
     inputBirthdate.classList.add("border-wrong");
     inputBirthdate.classList.remove("border-good");
-    validatorThree = false;
+    validatorThree = false
   }
 })
 
@@ -126,7 +128,6 @@ inputQuantity.addEventListener("input", function(e){
       inputQuantity.classList.remove("border-good");
       inputQuantity.setCustomValidity("Vous devez entrer des chiffres");
       inputQuantity.reportValidity()
-      inputQuantity.focus();
     } else {
       inputQuantity.classList.add("border-good");
       inputQuantity.classList.remove("border-wrong");
@@ -166,7 +167,7 @@ function checkCheckbox() {
 function validate(e) {
   radioChecked();
   checkCheckbox();
-  let alertText = validators() ? "Merci ! Votre réservation a été reçue" : "Certains champs du formulaire ne sont pas rempli correctement" ; //if validators is true then alertText = good text else bad txt
+  let alertText = validators() ? "Merci ! Votre réservation a été reçue" : "Certains champs du formulaire ne sont pas rempli correctement"; //if validators is true then alertText = good text else bad txt
   alert(alertText);
   if (!validators()) {
     e.preventDefault()
